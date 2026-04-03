@@ -341,7 +341,7 @@ body.menu-open nav { background: transparent; border-bottom-color: transparent; 
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 6rem 2rem 4rem;
+  padding: 6rem 2rem 7rem;
   overflow: hidden;
 }
 .hero-bg {
@@ -421,6 +421,8 @@ body.menu-open nav { background: transparent; border-bottom-color: transparent; 
   justify-content: center;
   flex-wrap: wrap;
   animation: fadeUp 1.2s 0.8s var(--ease-out) both;
+  position: relative;
+  z-index: 3;
 }
 .btn-primary {
   display: inline-flex;
@@ -457,7 +459,7 @@ body.menu-open nav { background: transparent; border-bottom-color: transparent; 
   align-items: center;
   gap: 0.5rem;
   padding: 1rem 2.2rem;
-  background: transparent;
+  background: var(--bg-deep);
   color: var(--text-primary);
   font-family: var(--font-body);
   font-size: 0.82rem;
@@ -485,6 +487,8 @@ body.menu-open nav { background: transparent; border-bottom-color: transparent; 
   align-items: center;
   gap: 0.5rem;
   animation: fadeIn 1s 1.4s var(--ease-out) both;
+  z-index: 1;
+  pointer-events: none;
 }
 .hero-scroll span {
   font-size: 0.65rem;
