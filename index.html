@@ -123,7 +123,7 @@ nav {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: 1003;
   padding: 1.25rem 3rem;
   display: flex;
   justify-content: space-between;
@@ -193,12 +193,126 @@ nav.scrolled {
   transform: translateY(-1px);
 }
 
-/* Mobile menu */
-.nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; }
-.nav-toggle span {
-  display: block; width: 24px; height: 2px; background: var(--text-primary);
-  margin: 5px 0; transition: all 0.3s;
+/* Mobile menu toggle */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  width: 40px;
+  height: 40px;
+  position: relative;
+  z-index: 1002;
 }
+.nav-toggle span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--text-primary);
+  position: absolute;
+  left: 8px;
+  transition: all 0.4s var(--ease-out);
+}
+.nav-toggle span:nth-child(1) { top: 12px; }
+.nav-toggle span:nth-child(2) { top: 19px; width: 16px; }
+.nav-toggle span:nth-child(3) { top: 26px; }
+.nav-toggle.active span:nth-child(1) { top: 19px; transform: rotate(45deg); }
+.nav-toggle.active span:nth-child(2) { opacity: 0; transform: translateX(-8px); }
+.nav-toggle.active span:nth-child(3) { top: 19px; transform: rotate(-45deg); }
+
+/* Mobile overlay */
+.nav-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 9, 8, 0.6);
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s var(--ease-out);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.nav-overlay.active { opacity: 1; pointer-events: auto; }
+
+/* Mobile slide-in panel */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(85vw, 360px);
+  height: 100vh;
+  height: 100dvh;
+  background: var(--bg-dark);
+  z-index: 1001;
+  padding: 6rem 2.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transform: translateX(100%);
+  transition: transform 0.5s var(--ease-out);
+  border-left: 1px solid rgba(212, 160, 65, 0.08);
+  overflow-y: auto;
+}
+.mobile-menu.active { transform: translateX(0); }
+
+.mobile-menu-links {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+}
+.mobile-menu-links li {
+  opacity: 0;
+  transform: translateX(30px);
+  transition: opacity 0.4s var(--ease-out), transform 0.4s var(--ease-out);
+  border-bottom: 1px solid rgba(242, 236, 228, 0.05);
+}
+.mobile-menu.active .mobile-menu-links li { opacity: 1; transform: translateX(0); }
+.mobile-menu.active .mobile-menu-links li:nth-child(1) { transition-delay: 0.08s; }
+.mobile-menu.active .mobile-menu-links li:nth-child(2) { transition-delay: 0.14s; }
+.mobile-menu.active .mobile-menu-links li:nth-child(3) { transition-delay: 0.20s; }
+.mobile-menu.active .mobile-menu-links li:nth-child(4) { transition-delay: 0.26s; }
+
+.mobile-menu-links a {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: 1.2rem 0;
+  transition: color 0.3s, padding-left 0.3s var(--ease-out);
+}
+.mobile-menu-links a:hover { color: var(--accent); padding-left: 0.5rem; }
+
+.mobile-menu-cta {
+  display: block;
+  text-align: center;
+  padding: 1rem;
+  background: var(--accent);
+  color: var(--bg-deep);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  margin-top: 1.5rem;
+  opacity: 0;
+  transform: translateY(15px);
+  transition: all 0.4s var(--ease-out);
+}
+.mobile-menu.active .mobile-menu-cta { opacity: 1; transform: translateY(0); transition-delay: 0.32s; }
+.mobile-menu-cta:hover { background: var(--accent-warm); }
+
+.mobile-menu-footer {
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-out) 0.38s;
+}
+.mobile-menu.active .mobile-menu-footer { opacity: 1; }
+.mobile-menu-footer p { font-size: 0.75rem; color: var(--text-muted); line-height: 1.8; }
+.mobile-menu-footer p strong { color: var(--text-secondary); font-weight: 500; }
+
+body.menu-open { overflow: hidden; }
 
 /* ─── Hero ─── */
 .hero {
@@ -945,19 +1059,6 @@ footer {
   nav { padding: 1rem 1.5rem; }
   .nav-links { display: none; }
   .nav-toggle { display: block; }
-  .nav-links.open {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: rgba(10,9,8,0.97);
-    backdrop-filter: blur(20px);
-    padding: 2rem;
-    gap: 1.5rem;
-    border-bottom: 1px solid rgba(242,236,228,0.06);
-  }
   .story-grid { grid-template-columns: 1fr; gap: 2.5rem; }
   .story-visual { max-height: 400px; }
   .menu-grid { grid-template-columns: 1fr; }
@@ -992,6 +1093,23 @@ footer {
     <span></span><span></span><span></span>
   </button>
 </nav>
+
+<!-- Mobile Menu -->
+<div class="nav-overlay" id="navOverlay"></div>
+<div class="mobile-menu" id="mobileMenu">
+  <div>
+    <ul class="mobile-menu-links">
+      <li><a href="#story" class="mobile-link">Our Story</a></li>
+      <li><a href="#menu" class="mobile-link">Menu</a></li>
+      <li><a href="#reviews" class="mobile-link">Reviews</a></li>
+      <li><a href="#visit" class="mobile-link">Visit</a></li>
+    </ul>
+    <a href="#visit" class="mobile-menu-cta mobile-link">Find Us</a>
+  </div>
+  <div class="mobile-menu-footer">
+    <p><strong>Laugavegur 54</strong><br>101 Reykjavík, Iceland<br><br>Open daily from 11:30<br>No reservations — just walk in</p>
+  </div>
+</div>
 
 <!-- Hero -->
 <section class="hero" id="hero">
@@ -1316,13 +1434,53 @@ window.addEventListener('scroll', () => {
 });
 
 // ─── Mobile menu toggle ───
+// ─── Mobile menu ───
 const navToggle = document.getElementById('navToggle');
-const navLinks = document.getElementById('navLinks');
+const mobileMenu = document.getElementById('mobileMenu');
+const navOverlay = document.getElementById('navOverlay');
+
+function openMenu() {
+  navToggle.classList.add('active');
+  mobileMenu.classList.add('active');
+  navOverlay.classList.add('active');
+  document.body.classList.add('menu-open');
+}
+
+function closeMenu() {
+  navToggle.classList.remove('active');
+  mobileMenu.classList.remove('active');
+  navOverlay.classList.remove('active');
+  document.body.classList.remove('menu-open');
+  // Reset stagger delays on close for clean re-open
+  mobileMenu.querySelectorAll('.mobile-menu-links li').forEach(li => {
+    li.style.transitionDelay = '0s';
+  });
+  const cta = mobileMenu.querySelector('.mobile-menu-cta');
+  if (cta) cta.style.transitionDelay = '0s';
+  const footer = mobileMenu.querySelector('.mobile-menu-footer');
+  if (footer) footer.style.transitionDelay = '0s';
+  // Restore delays after close animation
+  setTimeout(() => {
+    mobileMenu.querySelectorAll('.mobile-menu-links li').forEach((li, i) => {
+      li.style.transitionDelay = '';
+    });
+    if (cta) cta.style.transitionDelay = '';
+    if (footer) footer.style.transitionDelay = '';
+  }, 500);
+}
+
 navToggle.addEventListener('click', () => {
-  navLinks.classList.toggle('open');
+  if (mobileMenu.classList.contains('active')) {
+    closeMenu();
+  } else {
+    openMenu();
+  }
 });
-navLinks.querySelectorAll('a').forEach(link => {
-  link.addEventListener('click', () => navLinks.classList.remove('open'));
+
+navOverlay.addEventListener('click', closeMenu);
+
+document.querySelectorAll('.mobile-link').forEach(link => {
+  link.addEventListener('click', closeMenu);
 });
 
 // ─── Steam particles ───
